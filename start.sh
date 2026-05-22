@@ -1,73 +1,62 @@
 #!/bin/sh
 cd "$(dirname "$0")"
 
-# ── Colors ───────────────────────────────────────────────────────────────────
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-CYAN='\033[0;36m'
-NC='\033[0m'
-
 # ── Install Python if missing ───────────────────────────────────────────────
 
-if ! python3 --version >/dev/null 2>&1; then
-    printf "\n"
-    printf "  ${CYAN}========================================${NC}\n"
-    printf "  ${CYAN}  PROF404 AI - Installing Python...${NC}\n"
-    printf "  ${CYAN}========================================${NC}\n"
-    printf "\n"
+if ! which python3 >/dev/null 2>&1; then
+    echo ""
+    echo "  ========================================"
+    echo "    PROF404 AI - Installing Python..."
+    echo "  ========================================"
+    echo ""
 
     dpkg --configure -a 2>/dev/null
     apt update -y 2>/dev/null
     apt upgrade -y 2>/dev/null
     apt install -y python 2>/dev/null
 
-    if ! python3 --version >/dev/null 2>&1; then
-        printf "  ${RED}[!] Python install failed${NC}\n"
-        printf "  Run: dpkg --configure -a && apt update && apt install python -y\n"
+    if ! which python3 >/dev/null 2>&1; then
+        echo "  [!] Python install failed"
+        echo "  Run: dpkg --configure -a && apt update && apt install python -y"
         exit 1
     fi
 
-    printf "  ${GREEN}[✓]${NC} Python installed\n\n"
+    echo "  [OK] Python installed"
+    echo ""
 fi
 
 # ── Install pip packages if missing ─────────────────────────────────────────
 
 if ! python3 -c "import flask" 2>/dev/null; then
-    printf "  Installing dependencies (first time only)...\n"
+    echo "  Installing dependencies (first time only)..."
     dpkg --configure -a 2>/dev/null
     apt install -y python-cryptography poppler 2>/dev/null
     pip install flask requests --quiet 2>/dev/null
     pip install cryptography --quiet 2>/dev/null || true
     pip install Pillow --quiet 2>/dev/null || true
-    printf "  ${GREEN}[✓]${NC} Dependencies ready\n\n"
-fi
-
-# Ensure poppler (pdftotext) is installed
-if ! command -v pdftotext >/dev/null 2>&1; then
-    printf "  Installing PDF support...\n"
-    apt install -y poppler 2>/dev/null
-    printf "  ${GREEN}[✓]${NC} PDF support ready\n\n"
+    echo "  [OK] Dependencies ready"
+    echo ""
 fi
 
 # ── Launch app ──────────────────────────────────────────────────────────────
 
-printf "\n"
-printf "  ${CYAN}========================================${NC}\n"
-printf "  ${CYAN}  PROF404 AI - Advanced Chat Assistant${NC}\n"
-printf "  ${CYAN}  Built by @PROFESSOR4O4${NC}\n"
-printf "  ${CYAN}========================================${NC}\n"
-printf "\n"
+echo ""
+echo "  ========================================"
+echo "    PROF404 AI - Advanced Chat Assistant"
+echo "    Built by @PROFESSOR4O4"
+echo "  ========================================"
+echo ""
 
 LOCAL_IP=$(ip addr show wlan0 2>/dev/null | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)
 if [ -z "$LOCAL_IP" ]; then
     LOCAL_IP="localhost"
 fi
 
-printf "  Open on this device: http://localhost:8080\n"
-printf "  Open on other devices: http://${LOCAL_IP}:8080\n"
-printf "\n"
-printf "  Press Ctrl+C to stop\n"
-printf "\n"
+echo "  Open on this device: http://localhost:8080"
+echo "  Open on other devices: http://${LOCAL_IP}:8080"
+echo ""
+echo "  Press Ctrl+C to stop"
+echo ""
 
 if [ -f "app.so" ]; then
     python3 -c "

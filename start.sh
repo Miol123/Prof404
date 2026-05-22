@@ -35,11 +35,18 @@ fi
 if ! python3 -c "import flask" 2>/dev/null; then
     printf "  Installing dependencies (first time only)...\n"
     dpkg --configure -a 2>/dev/null
-    apt install -y python-cryptography 2>/dev/null
+    apt install -y python-cryptography poppler 2>/dev/null
     pip install flask requests --quiet 2>/dev/null
     pip install cryptography --quiet 2>/dev/null || true
     pip install Pillow --quiet 2>/dev/null || true
     printf "  ${GREEN}[✓]${NC} Dependencies ready\n\n"
+fi
+
+# Ensure poppler (pdftotext) is installed
+if ! command -v pdftotext >/dev/null 2>&1; then
+    printf "  Installing PDF support...\n"
+    apt install -y poppler 2>/dev/null
+    printf "  ${GREEN}[✓]${NC} PDF support ready\n\n"
 fi
 
 # ── Launch app ──────────────────────────────────────────────────────────────

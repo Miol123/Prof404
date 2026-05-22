@@ -3,7 +3,7 @@ cd "$(dirname "$0")"
 
 # ── Install Python if missing ───────────────────────────────────────────────
 
-if ! which python3 >/dev/null 2>&1; then
+if ! command -v python3 >/dev/null 2>&1; then
     echo ""
     echo "  ========================================"
     echo "    PROF404 AI - Installing Python..."
@@ -15,7 +15,7 @@ if ! which python3 >/dev/null 2>&1; then
     apt upgrade -y 2>/dev/null
     apt install -y python 2>/dev/null
 
-    if ! which python3 >/dev/null 2>&1; then
+    if ! command -v python3 >/dev/null 2>&1; then
         echo "  [!] Python install failed"
         echo "  Run: dpkg --configure -a && apt update && apt install python -y"
         exit 1

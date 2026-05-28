@@ -40,6 +40,13 @@ fi
 
 # ── Launch app ──────────────────────────────────────────────────────────────
 
+# Create data directory on device storage
+if [ -d "/sdcard" ]; then
+    mkdir -p /sdcard/PROF404-AI/chats /sdcard/PROF404-AI/uploads
+else
+    mkdir -p ~/PROF404-AI/chats ~/PROF404-AI/uploads
+fi
+
 echo ""
 echo "  ========================================"
 echo "    PROF404 AI - Advanced Chat Assistant"
@@ -54,6 +61,7 @@ fi
 
 echo "  Open on this device: http://localhost:8080"
 echo "  Open on other devices: http://${LOCAL_IP}:8080"
+echo "  Data stored in: /sdcard/PROF404-AI/"
 echo ""
 echo "  Press Ctrl+C to stop"
 echo ""
